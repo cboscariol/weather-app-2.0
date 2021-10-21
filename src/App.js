@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './App.css'
 /*
 Olá tudo bem? 
 
@@ -32,8 +33,11 @@ o layout como você quiser!!
 function App() {
   const [city, setCity] = useState("");
   const [weatherForecast, setWeatherForecast] = useState(null);
+  const [isLoading, setIsloading] = useState(false)
+  const [error, setError] = useState(false)
 
   const handleSearch = () => {
+    setIsloading(true)
     fetch(
       `${process.env.REACT_APP_BASE_URL}current.json?key=${process.env.REACT_APP_KEY}&q=${city}&lang=pt`
     )
@@ -41,17 +45,23 @@ function App() {
         if (res.status === 200) {
           return res.json();
         }
+        if (res.status >= 400) {
+          setError(true)
+        }
       })
       .then((data) => {
         console.log(data);
         setWeatherForecast(data);
+        setIsloading(false)
+        setCity("")
+        setError(false)
       });
   };
 
   return (
     <>
       <div>
-        <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <nav className="navbar navbar-expand-md navbar-light mb-4">
           <a className="navbar-brand" href="#search">
             EBAC Weather
           </a>
@@ -75,9 +85,14 @@ function App() {
               />
             </div>
           </div>
-          <button className="btn btn-lg btn-primary" onClick={handleSearch}>
-            Pesquisar
+          <button className="btn btn-lg btn-secondary" onClick={handleSearch}>
+            {isLoading ? "Pesquisando..." : "Pesquisar"}
           </button>
+          {error &&
+            <div class="alert alert-danger" role="alert">
+              Houve um erro, tente novamente!
+            </div>
+          }
 
           {weatherForecast ? (
             <>
@@ -93,7 +108,10 @@ function App() {
                     Hoje o dia está: {weatherForecast.current.condition.text}
                   </h3>
                   <p className="lead">
-                    Temp: {weatherForecast.current.temp_c}&#8451;
+                    Temp: {weatherForecast.current.temp_c}&#8451; Sensação térmica: {weatherForecast.current.feelslike_c}&#8451;
+                  </p>
+                  <p className="lead">
+                    Cidade/UF: {weatherForecast.location.name} / {weatherForecast.location.region}
                   </p>
                 </div>
               </div>

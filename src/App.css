@@ -1,0 +1,22 @@
+body {
+  background-image: url("https://cdn.pixabay.com/photo/2018/05/30/00/24/thunderstorm-3440450_960_720.jpg");
+  background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.jumbotron, .navbar-light {
+  box-shadow: 0px 0px 10px 10px rgba(255, 255, 255, 0.52);
+	color: #fff;
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.jumbotron {
+  margin: 100px auto;
+}
+
+.navbar-brand {
+  color: #fff !important;
+}
+
